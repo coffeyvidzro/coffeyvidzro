@@ -1,6 +1,6 @@
 ---
 title: "Dugble"
-description: "A developer-first A2P messaging and infrastructure platform providing reliable email and SMS APIs."
+description: "A developer-first communications infrastructure experiment for reliable email, A2P SMS, and OTP delivery."
 pubDate: 2026-08-18
 tech:
   [
@@ -20,4 +20,51 @@ tech:
 draft: false
 ---
 
-# Dugble API
+# Dugble
+
+**Communications infrastructure for developers.**
+
+Dugble is an adventure in building the kind of infrastructure that is easy to take for granted when it works: reliable APIs for sending transactional email, A2P SMS, and OTPs.
+
+The goal is straightforward—give developers a clean API while hiding the operational complexity of working with different communication providers underneath it.
+
+## The idea
+
+Sending a message is easy to describe but surprisingly difficult to make dependable at scale. Providers have different APIs, delivery behaviour, credentials, limits, and failure modes.
+
+Dugble explores an abstraction around those differences. Applications talk to Dugble through a consistent API while the platform handles the work of accepting messages, processing them asynchronously, communicating with providers, and recording what happened.
+
+## What I built
+
+The project covers the core pieces of a messaging platform:
+
+- transactional email and A2P SMS APIs
+- OTP delivery workflows
+- provider abstraction
+- asynchronous message processing
+- authentication and API keys
+- usage and delivery tracking
+- database migrations and typed queries
+- rate limiting and abuse protection
+- observability and error reporting
+- containerized deployment infrastructure
+
+Rather than treating the API as the whole product, I wanted to explore the systems underneath it—the queues, workers, persistence, retries, and operational boundaries that make an API useful in the first place.
+
+## Engineering
+
+Dugble is built in Go with Echo for the HTTP layer and PostgreSQL as its primary datastore. SQLC and pgxv5 provide typed database access, while Atlas handles schema migrations.
+
+NATS JetStream is used for asynchronous processing, allowing message work to move away from the request path. Redis supports fast, ephemeral infrastructure needs, while Docker and AWS provide the deployment foundation.
+
+Sentry and Arcjet are part of the operational and security layer.
+
+The architecture is deliberately more involved than a simple CRUD API because the experiment is really about understanding communication infrastructure as a system.
+
+## What I'm learning
+
+Dugble has been one of my deeper infrastructure adventures.
+
+It has pushed me to think about reliability beyond HTTP status codes: what happens when a provider is unavailable, when work needs to be retried, when a request succeeds but downstream delivery doesn't, and how an operator can understand what happened after the fact.
+
+I like projects like this because they sit underneath the visible product. You don't notice the infrastructure when everything works—and that's exactly what makes building it interesting.
