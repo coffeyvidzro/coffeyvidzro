@@ -14,10 +14,14 @@ const projects = (
   <Container>
     <main class="py-16 sm:py-24">
       <header class="max-w-2xl">
-        <p class="mb-4 text-sm font-medium uppercase tracking-[0.2em] opacity-60">
+        <p
+          class="mb-4 text-sm font-medium tracking-[0.2em] uppercase opacity-60"
+        >
           Adventures
         </p>
-        <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">{PROJECTS.title}</h1>
+        <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">
+          {PROJECTS.title}
+        </h1>
         <p class="mt-6 text-lg leading-8 opacity-70">{PROJECTS.description}</p>
       </header>
 
@@ -27,7 +31,9 @@ const projects = (
             <article class="group border-t pt-8">
               <div class="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
                 <div class="max-w-2xl">
-                  <p class="text-sm opacity-50">{String(index + 1).padStart(2, "0")}</p>
+                  <p class="text-sm opacity-50">
+                    {String(index + 1).padStart(2, "0")}
+                  </p>
                   <h2 class="mt-2 text-2xl font-semibold tracking-tight">
                     <a
                       href={`/projects/${project.id}`}
@@ -36,7 +42,9 @@ const projects = (
                       {project.data.title}
                     </a>
                   </h2>
-                  <p class="mt-3 leading-7 opacity-70">{project.data.description}</p>
+                  <p class="mt-3 leading-7 opacity-70">
+                    {project.data.description}
+                  </p>
                 </div>
 
                 <p class="shrink-0 text-sm opacity-50 sm:pt-1">

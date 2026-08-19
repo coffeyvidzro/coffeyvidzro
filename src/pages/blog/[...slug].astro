@@ -33,20 +33,24 @@ const { Content } = await render(post);
             ← All writing
           </a>
 
-          <p class="mt-10 text-sm font-medium uppercase tracking-[0.2em] opacity-60">
+          <p
+            class="mt-10 text-sm font-medium tracking-[0.2em] uppercase opacity-60"
+          >
             Writing
           </p>
           <h1 class="mt-4 text-4xl font-bold tracking-tight sm:text-6xl">
             {post.data.title}
           </h1>
-          <p class="mt-6 text-xl leading-8 opacity-70">{post.data.description}</p>
+          <p class="mt-6 text-xl leading-8 opacity-70">
+            {post.data.description}
+          </p>
           <p class="mt-6 text-sm opacity-50">
             <FormattedDate date={post.data.pubDate} />
           </p>
         </header>
 
         <article
-          class="prose prose-neutral mt-12 max-w-none prose-headings:tracking-tight prose-a:underline prose-a:underline-offset-4"
+          class="prose prose-neutral prose-headings:tracking-tight prose-a:underline prose-a:underline-offset-4 mt-12 max-w-none"
         >
           <Content />
         </article>

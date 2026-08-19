@@ -32,7 +32,9 @@ const { Content } = await render(project);
           ← All adventures
         </a>
 
-        <p class="mt-10 text-sm font-medium uppercase tracking-[0.2em] opacity-60">
+        <p
+          class="mt-10 text-sm font-medium tracking-[0.2em] uppercase opacity-60"
+        >
           Adventure
         </p>
         <h1 class="mt-4 text-4xl font-bold tracking-tight sm:text-6xl">
@@ -45,19 +47,24 @@ const { Content } = await render(project);
           <FormattedDate date={project.data.pubDate} />
         </p>
 
-        {project.data.tech?.length > 0 && (
-          <ul class="mt-8 flex flex-wrap gap-2" aria-label="Technologies used">
-            {project.data.tech.map((technology) => (
-              <li class="rounded-full border px-3 py-1 text-sm opacity-70">
-                {technology}
-              </li>
-            ))}
-          </ul>
-        )}
+        {
+          project.data.tech?.length > 0 && (
+            <ul
+              class="mt-8 flex flex-wrap gap-2"
+              aria-label="Technologies used"
+            >
+              {project.data.tech.map((technology) => (
+                <li class="rounded-full border px-3 py-1 text-sm opacity-70">
+                  {technology}
+                </li>
+              ))}
+            </ul>
+          )
+        }
       </header>
 
       <article
-        class="prose prose-neutral mt-12 max-w-none prose-headings:tracking-tight prose-a:underline prose-a:underline-offset-4"
+        class="prose prose-neutral prose-headings:tracking-tight prose-a:underline prose-a:underline-offset-4 mt-12 max-w-none"
       >
         <Content />
       </article>

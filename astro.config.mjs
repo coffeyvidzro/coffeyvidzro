@@ -12,6 +12,16 @@ export default defineConfig({
   site: "https://vidzro.com",
   integrations: [react(), mdx(), sitemap()],
 
+  markdown: {
+    shikiConfig: {
+      themes: {
+        light: "github-light",
+        dark: "github-dark",
+      },
+      defaultColor: false,
+    },
+  },
+
   fonts: [
     {
       provider: fontProviders.google(),
