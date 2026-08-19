@@ -1,9 +1,22 @@
 ---
+import Container from "../components/Container.astro";
 import Layout from "../layouts/Layout.astro";
-import { HOME } from "../consts";
+import { SITE_SCHEMA, HOME } from "../consts";
 ---
 
-<Layout title={HOME.title} description={HOME.description}>
-  <h1>{HOME.title}</h1>
-  <p>{HOME.description}</p>
+<Layout title={HOME.title} description={HOME.description} jsonLd={SITE_SCHEMA}>
+  <Container>
+    <section class="py-24">
+      <h1>{HOME.title}</h1>
+      <p>{HOME.description}</p>
+    </section>
+
+    <section class="py-24">
+      <!-- featured posts -->
+    </section>
+
+    <section class="py-24">
+      <!-- projects -->
+    </section>
+  </Container>
 </Layout>

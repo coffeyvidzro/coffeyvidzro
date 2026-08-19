@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import { PROJECTS } from "../../consts";
+import FormattedDate from "../../components/FormattedDate.astro";
 
 const projects = (
   await getCollection("projects", ({ data }) => !data.draft)
@@ -19,10 +20,11 @@ const projects = (
           <a href={`/projects/${project.id}`}>{project.data.title}</a>
 
           <p>{project.data.description}</p>
+          <h4 class="title">{project.data.title}</h4>
 
-          <time datetime={project.data.pubDate.toISOString()}>
-            {project.data.pubDate.toLocaleDateString()}
-          </time>
+          <p class="date">
+            <FormattedDate date={project.data.pubDate} />
+          </p>
         </li>
       ))
     }

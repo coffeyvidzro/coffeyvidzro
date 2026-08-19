@@ -44,3 +44,28 @@ export const SOCIALS: Social[] = [
     href: "https://www.instagram.com/coffeyvidzro",
   },
 ];
+
+export const SITE_SCHEMA = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": `${SITE.url}/#person`,
+      name: SITE.name,
+      givenName: "Coffey",
+      familyName: "Vidzro",
+      url: SITE.url,
+      sameAs: SOCIALS.map((social) => social.href),
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${SITE.url}/#website`,
+      url: SITE.url,
+      name: SITE.name,
+      description: HOME.description,
+      publisher: {
+        "@id": `${SITE.url}/#person`,
+      },
+    },
+  ],
+};

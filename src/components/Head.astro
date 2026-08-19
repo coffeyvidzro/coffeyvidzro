@@ -7,12 +7,22 @@ interface Props {
   description: string;
   image?: string;
   noindex?: boolean;
+  type?: "website" | "article" | "profile";
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
-const { title, description, image = "/og.png", noindex = false } = Astro.props;
+const {
+  title,
+  description,
+  image = "/og.png",
+  noindex = false,
+  type = "website",
+  jsonLd,
+} = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const socialImage = new URL(image, Astro.url);
+const socialImage = new URL(image, Astro.site);
+const schema = Array.isArray(jsonLd) ? jsonLd : [jsonLd];
 ---
 
 <!-- Global Metadata -->
@@ -27,7 +37,7 @@ const socialImage = new URL(image, Astro.url);
 {noindex && <meta name="robots" content="noindex, nofollow" />}
 
 <!-- Font preloads -->
-<Font cssVariable="--font-geist-sans" />
+<Font cssVariable="--font-geist-sans" preload />
 <Font cssVariable="--font-geist-mono" />
 
 <!-- Primary Meta Tags -->
@@ -35,7 +45,7 @@ const socialImage = new URL(image, Astro.url);
 <meta name="description" content={description} />
 
 <!-- Open Graph -->
-<meta property="og:type" content="website" />
+<meta property="og:type" content={type} />
 <meta property="og:title" content={title} />
 <meta property="og:url" content={canonicalURL} />
 <meta property="og:site_name" content={SITE.name} />
@@ -48,3 +58,22 @@ const socialImage = new URL(image, Astro.url);
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={socialImage} />
+
+<!-- RSS Link -->
+<link
+  rel="alternate"
+  type="application/rss+xml"
+  title={SITE.name}
+  href={new URL("rss.xml", Astro.site)}
+/>
+
+<!-- JSON-LD Structured Data -->
+{
+  schema.map((item) => (
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(item)}
+    />
+  ))
+}
