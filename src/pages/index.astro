@@ -3,7 +3,7 @@ import { getCollection } from "astro:content";
 import Container from "../components/Container.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 import Layout from "../layouts/Layout.astro";
-import { HOME, SITE, SITE_SCHEMA } from "../consts";
+import { HOME, SITE_SCHEMA } from "../consts";
 
 const posts = (await getCollection("blog", ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
@@ -73,19 +73,6 @@ const projects = (await getCollection("projects", ({ data }) => !data.draft))
           </article>
         ))}
       </div>
-    </section>
-
-    <section class="border-t py-16">
-      <p class="text-sm uppercase tracking-[0.2em] opacity-60">Elsewhere</p>
-      <h2 class="mt-2 text-3xl font-semibold tracking-tight">Find me on the internet.</h2>
-      <p class="mt-4 max-w-2xl leading-7 opacity-70">
-        I share code, ideas, experiments, and occasional updates across the web.
-      </p>
-      <a href={`mailto:${SITE.email}`} class="mt-6 inline-block underline underline-offset-4">Say hello →</a>
-    </section>
-
-    <section class="border-t py-16">
-      <p class="text-lg italic opacity-60">Pretending hard to work hard.</p>
     </section>
   </Container>
 </Layout>
