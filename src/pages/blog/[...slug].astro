@@ -1,5 +1,6 @@
 ---
 import Container from "../../components/Container.astro";
+import FormattedDate from "../../components/FormattedDate.astro";
 import { type CollectionEntry, getCollection, render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 
@@ -22,11 +23,43 @@ const { Content } = await render(post);
 
 <Layout title={post.data.title} description={post.data.description}>
   <Container>
-    <article>
-      <h1>{post.data.title}</h1>
-      <p>{post.data.description}</p>
+    <main class="py-16 sm:py-24">
+      <article class="max-w-3xl">
+        <header class="border-b pb-12">
+          <a
+            href="/blog"
+            class="text-sm font-medium opacity-60 transition-opacity hover:opacity-100"
+          >
+            ← All writing
+          </a>
 
-      <Content />
-    </article>
+          <p class="mt-10 text-sm font-medium uppercase tracking-[0.2em] opacity-60">
+            Writing
+          </p>
+          <h1 class="mt-4 text-4xl font-bold tracking-tight sm:text-6xl">
+            {post.data.title}
+          </h1>
+          <p class="mt-6 text-xl leading-8 opacity-70">{post.data.description}</p>
+          <p class="mt-6 text-sm opacity-50">
+            <FormattedDate date={post.data.pubDate} />
+          </p>
+        </header>
+
+        <article
+          class="prose prose-neutral mt-12 max-w-none prose-headings:tracking-tight prose-a:underline prose-a:underline-offset-4"
+        >
+          <Content />
+        </article>
+
+        <footer class="mt-16 border-t pt-8">
+          <a
+            href="/blog"
+            class="text-sm font-medium underline underline-offset-4 transition-opacity hover:opacity-60"
+          >
+            ← Explore more writing
+          </a>
+        </footer>
+      </article>
+    </main>
   </Container>
 </Layout>

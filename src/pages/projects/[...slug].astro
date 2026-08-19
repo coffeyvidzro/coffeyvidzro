@@ -1,6 +1,8 @@
 ---
 import { type CollectionEntry, getCollection, render } from "astro:content";
+import Container from "../../components/Container.astro";
 import Layout from "../../layouts/Layout.astro";
+import FormattedDate from "../../components/FormattedDate.astro";
 
 export async function getStaticPaths() {
   const projects = (await getCollection("projects")).filter(
@@ -20,5 +22,54 @@ const { Content } = await render(project);
 ---
 
 <Layout title={project.data.title} description={project.data.description}>
-  <Content />
+  <Container>
+    <main class="max-w-3xl py-16 sm:py-24">
+      <header class="border-b pb-12">
+        <a
+          href="/projects"
+          class="text-sm font-medium opacity-60 transition-opacity hover:opacity-100"
+        >
+          ← All adventures
+        </a>
+
+        <p class="mt-10 text-sm font-medium uppercase tracking-[0.2em] opacity-60">
+          Adventure
+        </p>
+        <h1 class="mt-4 text-4xl font-bold tracking-tight sm:text-6xl">
+          {project.data.title}
+        </h1>
+        <p class="mt-6 text-xl leading-8 opacity-70">
+          {project.data.description}
+        </p>
+        <p class="mt-6 text-sm opacity-50">
+          <FormattedDate date={project.data.pubDate} />
+        </p>
+
+        {project.data.tech?.length > 0 && (
+          <ul class="mt-8 flex flex-wrap gap-2" aria-label="Technologies used">
+            {project.data.tech.map((technology) => (
+              <li class="rounded-full border px-3 py-1 text-sm opacity-70">
+                {technology}
+              </li>
+            ))}
+          </ul>
+        )}
+      </header>
+
+      <article
+        class="prose prose-neutral mt-12 max-w-none prose-headings:tracking-tight prose-a:underline prose-a:underline-offset-4"
+      >
+        <Content />
+      </article>
+
+      <footer class="mt-16 border-t pt-8">
+        <a
+          href="/projects"
+          class="text-sm font-medium underline underline-offset-4 transition-opacity hover:opacity-60"
+        >
+          ← Explore more adventures
+        </a>
+      </footer>
+    </main>
+  </Container>
 </Layout>

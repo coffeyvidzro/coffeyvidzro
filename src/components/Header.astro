@@ -1,0 +1,26 @@
+---
+import Container from "./Container.astro";
+import { SITE } from "../consts";
+---
+
+<header class="border-b">
+  <Container>
+    <nav class="flex min-h-16 items-center justify-between gap-6" aria-label="Main navigation">
+      <a href="/" class="font-semibold tracking-tight transition-opacity hover:opacity-60">
+        {SITE.name}
+      </a>
+
+      <div class="flex items-center gap-5 text-sm">
+        <a href="/projects" class="opacity-70 transition-opacity hover:opacity-100">
+          Adventures
+        </a>
+        <a href="/blog" class="opacity-70 transition-opacity hover:opacity-100">
+          Writing
+        </a>
+        <a href="/about" class="opacity-70 transition-opacity hover:opacity-100">
+          About
+        </a>
+      </div>
+    </nav>
+  </Container>
+</header>
