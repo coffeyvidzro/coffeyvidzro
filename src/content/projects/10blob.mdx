@@ -1,6 +1,6 @@
 ---
 title: "10Blob"
-description: "A product concept for social sellers to turn product photos into a clean order link."
+description: "A mobile-first social commerce product that helps sellers turn social traffic into structured orders."
 pubDate: 2026-08-18
 tech:
   [
@@ -18,3 +18,53 @@ draft: false
 ---
 
 # 10Blob
+
+**Share a drop. Collect an order. Continue the conversation on WhatsApp.**
+
+10Blob is an experiment in making social commerce simpler for sellers who already run their businesses through WhatsApp, Instagram, TikTok, and other social channels.
+
+Instead of asking a seller to build a full storefront, 10Blob gives them a small, focused catalog they can publish as a shareable link. A customer can browse the products, reserve available stock, place an order, and continue the conversation on WhatsApp.
+
+## The idea
+
+A lot of social sellers already have the audience and the products. What they often lack is a lightweight way to turn a social post or chat into a structured order without forcing the customer through a complicated ecommerce experience.
+
+10Blob explores a simple flow:
+
+```text
+share → browse → order → WhatsApp
+```
+
+The product is intentionally small. A seller creates a drop of up to ten products, shares the link, and lets the drop do the work.
+
+## What I built
+
+I built the product end-to-end, including:
+
+- seller authentication and onboarding
+- product creation and image uploads
+- expiring product drops
+- inventory tracking and reservation
+- checkout and order management
+- rate limiting and abuse protection
+- social preview generation
+- analytics for sellers
+- WhatsApp handoff after checkout
+
+The interesting part wasn't any individual screen. It was making the small pieces behave like a real commerce system: stock needs to be reserved safely, expired drops need to stop accepting orders, and an order should leave the system in a consistent state even when something goes wrong.
+
+## Engineering
+
+10Blob is built with Next.js and TypeScript, with Prisma handling the data layer. Better Auth handles authentication, while UploadThing handles product media.
+
+Upstash provides the infrastructure for Redis-backed rate limiting and related server-side controls. The application also uses Dugble for communication infrastructure.
+
+The project has been a useful playground for thinking about the boundary between a quick product experiment and production-quality engineering.
+
+## What I'm learning
+
+10Blob is one of my adventures rather than a claim that I have solved social commerce.
+
+I'm interested in what happens when you remove everything that isn't essential from a product. The constraint of a ten-product drop forces the experience to stay focused, while the commerce workflow still exposes real engineering problems around state, inventory, authentication, and reliability.
+
+That's the part I enjoy: starting with a small idea and following it far enough that the implementation teaches me something new.
