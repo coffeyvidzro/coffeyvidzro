@@ -1,0 +1,30 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import { PROJECTS } from "../../consts";
+
+const projects = (
+  await getCollection("projects", ({ data }) => !data.draft)
+).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<Layout title={PROJECTS.title} description={PROJECTS.description}>
+  <h1>{PROJECTS.title}</h1>
+  <p>{PROJECTS.description}</p>
+
+  <ul>
+    {
+      projects.map((project) => (
+        <li>
+          <a href={`/projects/${project.id}`}>{project.data.title}</a>
+
+          <p>{project.data.description}</p>
+
+          <time datetime={project.data.pubDate.toISOString()}>
+            {project.data.pubDate.toLocaleDateString()}
+          </time>
+        </li>
+      ))
+    }
+  </ul>
+</Layout>
