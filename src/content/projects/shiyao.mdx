@@ -1,0 +1,72 @@
+---
+title: "Shiyao"
+description: "A secure, self-hosted execution environment for running untrusted AI-agent code inside isolated Firecracker microVMs."
+pubDate: 2026-08-24
+github: "https://github.com/coffeyvidzro/shiyao"
+tech:
+  [
+    "Go",
+    "Firecracker",
+    "KVM",
+    "nftables",
+    "VSOCK",
+    "Linux",
+  ]
+featured: true
+draft: false
+---
+
+# Shiyao
+
+**A secure, self-hosted execution environment for AI agents.**
+
+AI agents increasingly need to execute code, install packages, manipulate files, and interact with external services. Shiyao treats that generated code as untrusted and gives it an isolated execution boundary instead of running it directly on the host.
+
+## The idea
+
+Shiyao puts a trusted control plane in front of isolated Firecracker microVMs:
+
+```text
+AI agent / application
+        |
+        v
+  Shiyao control plane
+        |
+        v
+   Firecracker VM
+        |
+        v
+  untrusted workload
+```
+
+The control plane owns VM lifecycle, admission, execution, and network policy while the workload runs inside the guest.
+
+## What I built
+
+Shiyao brings together several pieces of infrastructure needed for practical agent sandboxes:
+
+- Firecracker microVM lifecycle management
+- VSOCK-based bounded command execution
+- Per-VM TAP networking with default-deny nftables policy
+- Explicit outbound network destinations
+- Admission limits for resident VMs and provisioning
+- Resource envelopes for guest workloads
+- Warm-instance pooling with reset semantics
+- Snapshot resume and cold-boot benchmarking
+- Cleanup of VM, networking, IPAM, and VSOCK resources
+
+The execution API also bounds request size, concurrency, command timeouts, and captured output so the control plane doesn't accidentally turn arbitrary agent code into an unbounded host resource consumer.
+
+## Engineering
+
+The project is written in Go and targets Linux on x86_64 with KVM. Firecracker provides the microVM boundary, while nftables controls guest forwarding and VSOCK provides the host-to-guest execution path.
+
+The networking model is deliberately default-deny. Guests can be granted explicit outbound destinations while cloud metadata access is blocked, reducing the blast radius of workloads that should not have unrestricted network access.
+
+Warm instances and snapshot resume explore the performance side of isolated execution: making strong isolation practical for interactive AI workloads without assuming that every environment can provide a universal startup latency.
+
+## What I'm learning
+
+Shiyao is an active engineering foundation rather than a claim of production-ready sandbox security. The interesting work is in the boundaries: VM lifecycle, network policy, resource ownership, cleanup, guest reset, and the assumptions made by the host kernel and Firecracker configuration.
+
+The project is an exploration of what it takes to make isolated code execution feel like a normal primitive for AI-agent systems.
