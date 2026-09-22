@@ -8,7 +8,7 @@ export const SITE: Site = {
 
 export const HOME: Metadata = {
   title: "Home",
-  description: "Pretending hard to work hard.",
+  description: "Building modern communication. On your terms.",
 };
 
 export const ABOUT: Metadata = {
@@ -54,8 +54,22 @@ export const SITE_SCHEMA = {
       name: SITE.name,
       givenName: "Coffey",
       familyName: "Vidzro",
+      jobTitle: "Software Engineer",
+      knowsAbout: [
+        "Go",
+        "Ruby on Rails",
+        "TypeScript",
+        "React",
+        "Node.js",
+        "System Design",
+        "REST APIs",
+        "Leamout",
+      ],
       url: SITE.url,
       sameAs: SOCIALS.map((social) => social.href),
+      worksFor: {
+        "@id": "https://leamout.com/#organization",
+      },
     },
     {
       "@type": "WebSite",
@@ -66,6 +80,16 @@ export const SITE_SCHEMA = {
       publisher: {
         "@id": `${SITE.url}/#person`,
       },
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://leamout.com/#organization",
+      name: "Leamout",
+      url: "https://leamout.com",
+      founder: {
+        "@id": `${SITE.url}/#person`,
+      },
+      sameAs: ["https://github.com/leamout"],
     },
   ],
 };
