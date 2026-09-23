@@ -6,41 +6,31 @@ import tailwindcss from "@tailwindcss/vite";
 import cloudflare from "@astrojs/cloudflare";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
+import remarkMath from "remark-math";
+import remarkDirective from "remark-directive";
+import rehypeKatex from "rehype-katex";
+import { imageConfig } from "./src/utils/image-config";
 
 // https://astro.build/config
 export default defineConfig({
   site: "https://vidzro.com",
+  image: {
+    service: {
+      entrypoint: "astro/assets/services/sharp",
+      config: imageConfig,
+    },
+  },
+
   integrations: [react(), mdx(), sitemap()],
 
   markdown: {
     shikiConfig: {
-      themes: {
-        light: "github-light",
-        dark: "github-dark",
-      },
-      defaultColor: false,
+      theme: "css-variables",
+      wrap: false,
     },
+    remarkPlugins: [remarkMath, remarkDirective],
+    rehypePlugins: [rehypeKatex],
   },
-
-  fonts: [
-    {
-      provider: fontProviders.google(),
-      name: "Geist",
-      cssVariable: "--font-geist-sans",
-      weights: [400, 500, 600, 700],
-      styles: ["normal"],
-      subsets: ["latin"],
-    },
-    {
-      provider: fontProviders.google(),
-      name: "Geist Mono",
-      cssVariable: "--font-geist-mono",
-      weights: [400, 500, 600, 700],
-      styles: ["normal"],
-      subsets: ["latin"],
-    },
-  ],
-
   vite: {
     plugins: [tailwindcss()],
   },

@@ -7,13 +7,11 @@ type Context = {
 };
 
 export async function GET(context: Context) {
-  const blog = (await getCollection("blog")).filter((post) => !post.data.draft);
-
-  const projects = (await getCollection("projects")).filter(
-    (project) => !project.data.draft,
+  const posts = (await getCollection("contents")).filter(
+    (post) => !post.data.draft,
   );
 
-  const items = [...blog, ...projects].sort(
+  const items = posts.sort(
     (a, b) =>
       new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf(),
   );
@@ -26,7 +24,7 @@ export async function GET(context: Context) {
       title: item.data.title,
       description: item.data.description,
       pubDate: item.data.pubDate,
-      link: `/${item.collection}/${item.id}/`,
+      link: `/${item.id}/`,
     })),
   });
 }
