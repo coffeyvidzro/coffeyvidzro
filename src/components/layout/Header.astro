@@ -11,8 +11,6 @@ const isAbout = Astro.url.pathname.replace(/\/$/, "") === "/about";
 
     <div class="nav-links">
       <a href="/about" aria-current={isAbout ? "page" : undefined}>About</a>
-      <a href="/#projects">Projects</a>
-      <a href="/#writing">Writing</a>
       <ThemeToggle />
     </div>
   </nav>
@@ -61,17 +59,6 @@ const isAbout = Astro.url.pathname.replace(/\/$/, "") === "/about";
   @media (max-width: 420px) {
     header {
       margin-bottom: 3.5rem;
-    }
-
-    nav {
-      align-items: flex-start;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .nav-links {
-      justify-content: space-between;
-      width: 100%;
     }
   }
 </style>

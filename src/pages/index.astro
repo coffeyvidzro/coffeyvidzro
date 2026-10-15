@@ -1,13 +1,25 @@
 ---
 import IndexLayout from "../layouts/IndexLayout.astro";
-import Introduction from "../components/home/Introduction.astro";
-import FeaturedProjects from "../components/home/FeaturedProjects.astro";
-import RecentWriting from "../components/home/RecentWriting.astro";
 import { HOME } from "../consts";
 ---
 
 <IndexLayout title={HOME.title} description={HOME.description}>
-  <Introduction />
-  <FeaturedProjects />
-  <RecentWriting />
+  <h1>Hey, I’m Coffey.</h1>
+  <p>
+    I’m a software engineer interested in developer tools, communication
+    systems, and infrastructure.
+  </p>
 </IndexLayout>
+
+<style>
+  h1 {
+    font-size: var(--font-size-m);
+    font-weight: var(--font-weight-bold);
+    margin: 0 0 1.25rem;
+  }
+
+  p {
+    margin: 0;
+    line-height: 1.75;
+  }
+</style>
