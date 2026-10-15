@@ -7,13 +7,13 @@ export const SITE: Site = {
 };
 
 export const HOME: Metadata = {
-  title: "Home",
-  description: "Building modern communication. On your terms.",
+  title: "Coffey Vidzro — Software Engineer & Builder",
+  description: "Coffey Vidzro is a software engineer building developer tools, communication systems, and AI infrastructure."
 };
 
 export const ABOUT: Metadata = {
   title: "About",
-  description: "A little bit about me, and what I do.",
+  description: "Learn about Coffey Vidzro, a software engineer working on developer tools, communications, and AI infrastructure."
 };
 
 export const BLOG: Metadata = {

@@ -1,10 +1,54 @@
 ---
 import IndexLayout from "../layouts/IndexLayout.astro";
-import { ABOUT } from "../consts";
+import { ABOUT, SITE } from "../consts";
 ---
 
 <IndexLayout title={ABOUT.title} description={ABOUT.description}>
-  <main>
-    <p>{ABOUT.description}</p>
-  </main>
+  <section class="about" aria-labelledby="about-heading">
+    <h1 id="about-heading">About me</h1>
+
+    <p>
+      I’m Coffey Vidzro, a software engineer who enjoys building useful products
+      and figuring out the systems that make them work.
+    </p>
+
+    <p>
+      My interests span developer tools, real-time communications, AI
+      infrastructure, and thoughtfully designed software. I’m currently
+      building <a href="https://leamout.com">Leamout</a> and sharing what I
+      learn along the way.
+    </p>
+
+    <p>
+      You can explore my <a href="/#projects">selected work</a>, read my
+      <a href="/#writing">writing</a>, or reach me at
+      <a href={"mailto:" + SITE.email}>{SITE.email}</a>.
+    </p>
+  </section>
 </IndexLayout>
+
+<style>
+  h1 {
+    font-size: clamp(1.8rem, 5vw, 2.3rem);
+    font-weight: var(--font-weight-bold);
+    line-height: 1.2;
+    letter-spacing: -0.055em;
+    margin: 0 0 1.75rem;
+  }
+
+  p {
+    line-height: 1.85;
+    margin: 0 0 1.25rem;
+  }
+
+  a {
+    color: var(--text-primary);
+    text-decoration: underline;
+    text-decoration-color: var(--text-tertiary);
+    text-underline-offset: 0.2em;
+  }
+
+  a:hover {
+    text-decoration-color: var(--text-primary);
+  }
+</style>

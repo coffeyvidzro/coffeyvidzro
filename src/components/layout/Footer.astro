@@ -1,58 +1,57 @@
 ---
-import { SITE } from "../../consts";
-const today = new Date();
+import { SITE, SOCIALS } from "../../consts";
+
+const year = new Date().getFullYear();
+const labels: Record<string, string> = {
+  "twitter-x": "X",
+  github: "GitHub",
+  linkedin: "LinkedIn",
+  instagram: "Instagram",
+};
 ---
 
 <footer>
-  <div class="footer-content">
-    <div class="copyright">
-      <span class="date">
-        &copy;
-        {today.getFullYear()}
-      </span>
-      {SITE.name}
-    </div>
-    <div class="powered-by">
-      Powered by{" "}
-      <a href="https://leamout.com">Leamout</a>
-    </div>
+  <div class="footer-links">
+    <a href={"mailto:" + SITE.email}>Email</a>
+    {
+      SOCIALS.map((social) => (
+        <a href={social.href} target="_blank" rel="noopener noreferrer">
+          {labels[social.name] || social.name}
+        </a>
+      ))
+    }
   </div>
+
+  <p>© {year} {SITE.name}</p>
 </footer>
+
 <style>
   footer {
-    font-size: var(--font-size-s);
-    font-weight: var(--font-weight-light);
-    line-height: 1.75;
+    border-top: 1px solid var(--border);
     color: var(--text-secondary);
-    opacity: 0.75;
-    margin-top: 4rem;
+    font-size: var(--font-size-s);
+    margin-top: 5rem;
+    padding-top: 1.5rem;
   }
 
-  .footer-content {
+  .footer-links {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    width: 100%;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
   }
 
-  .copyright,
-  .powered-by {
-    white-space: nowrap;
-  }
-
-  .copyright .date {
-    opacity: 1;
-  }
-
-  footer a {
+  a {
     color: var(--text-secondary);
     text-decoration: none;
     transition: color 0.2s ease-out;
   }
 
-  footer a:hover {
+  a:hover {
     color: var(--text-primary);
+  }
+
+  p {
+    color: var(--text-tertiary);
+    margin: 1.25rem 0 0;
   }
 </style>

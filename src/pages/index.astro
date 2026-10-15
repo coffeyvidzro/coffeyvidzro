@@ -1,10 +1,13 @@
 ---
 import IndexLayout from "../layouts/IndexLayout.astro";
+import Introduction from "../components/home/Introduction.astro";
+import FeaturedProjects from "../components/home/FeaturedProjects.astro";
+import RecentWriting from "../components/home/RecentWriting.astro";
 import { HOME } from "../consts";
 ---
 
 <IndexLayout title={HOME.title} description={HOME.description}>
-  <main>
-    <p>{HOME.description}</p>
-  </main>
+  <Introduction />
+  <FeaturedProjects />
+  <RecentWriting />
 </IndexLayout>
