@@ -7,23 +7,25 @@ export const SITE: Site = {
 };
 
 export const HOME: Metadata = {
-  title: "Coffey Vidzro — Software Engineer & Builder",
-  description: "Coffey Vidzro is a software engineer building developer tools, communication systems, and AI infrastructure."
+  title: "I’m Coffey Vidzro — Software Engineer & Builder",
+  description:
+    "I build developer infrastructure, communication systems, and useful products for the web.",
 };
 
 export const ABOUT: Metadata = {
-  title: "About",
-  description: "Learn about Coffey Vidzro, a software engineer working on developer tools, communications, and AI infrastructure."
+  title: "About me",
+  description:
+    "I’m Coffey Vidzro, a software engineer building developer tools, real-time communications, and AI infrastructure.",
 };
 
 export const BLOG: Metadata = {
-  title: "Blog",
-  description: "Words of my own, shaped by experience.",
+  title: "Writing",
+  description: "I write about building products, developer tools, and the decisions behind them.",
 };
 
 export const PROJECTS: Metadata = {
   title: "Projects",
-  description: "Things I've built, experimented with, and shipped.",
+  description: "I share the projects I’ve built, experimented with, and shipped.",
 };
 
 export const SOCIALS: Social[] = [
