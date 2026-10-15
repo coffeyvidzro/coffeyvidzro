@@ -3,7 +3,7 @@ import "../styles/global.css";
 import BaseHead from "../components/layout/Head.astro";
 import Header from "../components/layout/Header.astro";
 import Footer from "../components/layout/Footer.astro";
-import BaseLayout from "../layouts/BaseLayout.astro";
+import BaseLayout from "./BaseLayout.astro";
 import GradientMask from "../components/ui/GradientMask.astro";
 
 const { title, description } = Astro.props;
@@ -11,18 +11,15 @@ const { title, description } = Astro.props;
 
 <BaseLayout title={title} description={description} type="page">
   <BaseHead title={title} description={description} slot="head" />
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
   <div class="page-content">
     <GradientMask />
-    <div>
-      <Header />
-    </div>
-    <main>
+    <Header />
+    <main id="main-content">
       <slot />
     </main>
-
-    <div>
-      <Footer />
-    </div>
+    <Footer />
   </div>
 </BaseLayout>
 
@@ -35,5 +32,20 @@ const { title, description } = Astro.props;
 
   .page-content main {
     flex: 1;
+  }
+
+  .skip-link {
+    position: absolute;
+    left: 1.5rem;
+    top: -5rem;
+    z-index: 110;
+    background: var(--bg);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    padding: 0.5rem 0.75rem;
+  }
+
+  .skip-link:focus {
+    top: 0.75rem;
   }
 </style>

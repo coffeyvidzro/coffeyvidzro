@@ -1,23 +1,26 @@
 ---
 import { SITE } from "../../consts";
-import ThemeToggle from "../../components/ui/ThemeToggle.astro";
+import ThemeToggle from "../ui/ThemeToggle.astro";
 ---
 
 <header>
-  <nav>
+  <div class="header-inner">
     <a href="/">{SITE.name}</a>
     <ThemeToggle />
-  </nav>
+  </div>
 </header>
+
 <style>
   header {
     margin: 0;
   }
-  nav {
+
+  .header-inner {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
+
   header a {
     font-weight: var(--font-weight-bold);
     color: var(--text-primary);

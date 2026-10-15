@@ -4,7 +4,22 @@ import { HOME } from "../consts";
 ---
 
 <IndexLayout title={HOME.title} description={HOME.description}>
-  <main>
-    <p>{HOME.description}</p>
-  </main>
+  <h1>Hey, I’m Coffey.</h1>
+  <p>
+    I’m a software engineer interested in developer tools, communication
+    systems, and infrastructure.
+  </p>
 </IndexLayout>
+
+<style>
+  h1 {
+    font-size: var(--font-size-m);
+    font-weight: var(--font-weight-bold);
+    margin: 0 0 1.25rem;
+  }
+
+  p {
+    margin: 0;
+    line-height: 1.75;
+  }
+</style>
