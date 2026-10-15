@@ -5,13 +5,12 @@ import Header from "../components/layout/Header.astro";
 import Footer from "../components/layout/Footer.astro";
 import BaseLayout from "./BaseLayout.astro";
 import GradientMask from "../components/ui/GradientMask.astro";
-import { SITE_SCHEMA } from "../consts";
 
 const { title, description } = Astro.props;
 ---
 
 <BaseLayout title={title} description={description} type="page">
-  <BaseHead title={title} description={description} jsonLd={SITE_SCHEMA} slot="head" />
+  <BaseHead title={title} description={description} slot="head" />
   <a class="skip-link" href="#main-content">Skip to content</a>
 
   <div class="page-content">

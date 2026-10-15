@@ -21,8 +21,7 @@ const {
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const socialImage = new URL(image, Astro.site);
-const schema = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
-const pageTitle = title.includes(SITE.name) ? title : title + " | " + SITE.name;
+const schema = Array.isArray(jsonLd) ? jsonLd : [jsonLd];
 ---
 
 <!-- Global Metadata -->
@@ -53,12 +52,12 @@ const pageTitle = title.includes(SITE.name) ? title : title + " | " + SITE.name;
 />
 
 <!-- Primary Meta Tags -->
-<title>{pageTitle}</title>
+<title>{title}</title>
 <meta name="description" content={description} />
 
 <!-- Open Graph -->
 <meta property="og:type" content={type} />
-<meta property="og:title" content={pageTitle} />
+<meta property="og:title" content={title} />
 <meta property="og:url" content={canonicalURL} />
 <meta property="og:site_name" content={SITE.name} />
 <meta property="og:description" content={description} />
@@ -67,7 +66,7 @@ const pageTitle = title.includes(SITE.name) ? title : title + " | " + SITE.name;
 <!-- Twitter / X -->
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:url" content={canonicalURL} />
-<meta name="twitter:title" content={pageTitle} />
+<meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={socialImage} />
 

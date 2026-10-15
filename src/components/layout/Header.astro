@@ -1,64 +1,31 @@
 ---
 import { SITE } from "../../consts";
 import ThemeToggle from "../ui/ThemeToggle.astro";
-
-const isAbout = Astro.url.pathname.replace(/\/$/, "") === "/about";
 ---
 
 <header>
-  <nav aria-label="Primary navigation">
-    <a class="site-name" href="/">{SITE.name}</a>
-
-    <div class="nav-links">
-      <a href="/about" aria-current={isAbout ? "page" : undefined}>About</a>
-      <ThemeToggle />
-    </div>
-  </nav>
+  <div class="header-inner">
+    <a href="/">{SITE.name}</a>
+    <ThemeToggle />
+  </div>
 </header>
 
 <style>
   header {
-    margin: 0 0 5.25rem;
+    margin: 0;
   }
 
-  nav,
-  .nav-links {
+  .header-inner {
     display: flex;
+    justify-content: space-between;
     align-items: center;
   }
 
-  nav {
-    justify-content: space-between;
-    gap: 1rem;
-  }
-
-  .nav-links {
-    gap: 1.25rem;
-    white-space: nowrap;
-  }
-
-  a {
-    color: var(--text-secondary);
-    font-size: var(--font-size-s);
-    text-decoration: none;
-    transition: color 0.2s ease-out;
-  }
-
-  a:hover,
-  a[aria-current="page"] {
-    color: var(--text-primary);
-  }
-
-  .site-name {
-    color: var(--text-primary);
-    font-size: var(--font-size-m);
+  header a {
     font-weight: var(--font-weight-bold);
-    white-space: nowrap;
-  }
-
-  @media (max-width: 420px) {
-    header {
-      margin-bottom: 3.5rem;
-    }
+    color: var(--text-primary);
+    text-decoration: none;
+    min-width: 3rem;
+    display: inline-block;
   }
 </style>
