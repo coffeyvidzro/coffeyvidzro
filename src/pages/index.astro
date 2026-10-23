@@ -1,0 +1,58 @@
+---
+import IndexLayout from "../layouts/IndexLayout.astro";
+import { HOME } from "../consts";
+---
+
+<IndexLayout title={HOME.title} description={HOME.description}>
+  <div class="home">
+    <h1 class="sr-only">Coffey Vidzro</h1>
+
+    <p>
+      I'm Coffey Vidzro, a Ghanaian software engineer interested in building the
+      infrastructure behind modern communication.
+    </p>
+    <p>
+      I'm currently building <a href="https://leamout.com">Leamout</a>, a
+      carrier-grade runtime and control plane for autonomous voice agents.
+    </p>
+    <p class="more">
+      <a href="/about">More about me</a>
+    </p>
+  </div>
+</IndexLayout>
+
+<style>
+  .home {
+    padding-top: 2rem;
+  }
+
+  p {
+    margin: 0 0 1.25rem;
+    line-height: 1.8;
+  }
+
+  a {
+    color: var(--text-primary);
+    text-decoration: underline;
+    text-decoration-color: var(--text-tertiary);
+    text-underline-offset: 0.2em;
+  }
+
+  a:hover {
+    text-decoration-color: var(--text-primary);
+  }
+
+  .more {
+    margin-top: 1.75rem;
+  }
+
+  .more a {
+    color: var(--text-secondary);
+  }
+
+  @media (max-width: 480px) {
+    .home {
+      padding-top: 1.5rem;
+    }
+  }
+</style>

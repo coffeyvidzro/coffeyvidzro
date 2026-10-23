@@ -1,0 +1,67 @@
+---
+import "../styles/global.css";
+import BaseHead from "../components/layout/Head.astro";
+import Header from "../components/layout/Header.astro";
+import Footer from "../components/layout/Footer.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import GradientMask from "../components/ui/GradientMask.astro";
+import { personSchema } from "../lib/seo/person";
+import { websiteSchema } from "../lib/seo/website";
+import { webpageSchema } from "../lib/seo/webpage";
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  noindex?: boolean;
+}
+
+const { title, description, image, noindex = false } = Astro.props;
+const isAbout = Astro.url.pathname.replace(/\/$/, "") === "/about";
+const jsonLd = [
+  personSchema(),
+  websiteSchema(),
+  webpageSchema({
+    path: Astro.url.pathname,
+    name: title,
+    description,
+    type: isAbout ? "ProfilePage" : "WebPage",
+  }),
+];
+---
+
+<BaseLayout title={title} description={description} type="page">
+  <BaseHead
+    title={title}
+    description={description}
+    image={image}
+    type={isAbout ? "profile" : "website"}
+    jsonLd={noindex ? undefined : jsonLd}
+    noindex={noindex}
+    slot="head"
+  />
+  <div class="page-content">
+    <GradientMask />
+    <div>
+      <Header />
+    </div>
+    <main>
+      <slot />
+    </main>
+    <div>
+      <Footer />
+    </div>
+  </div>
+</BaseLayout>
+
+<style is:global>
+  .page-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .page-content main {
+    flex: 1;
+  }
+</style>

@@ -1,0 +1,111 @@
+---
+import IndexLayout from "../layouts/IndexLayout.astro";
+import { NOW } from "../consts";
+---
+
+<IndexLayout title={NOW.title} description={NOW.description}>
+  <div class="page">
+    <h1>Now.</h1>
+    <p>This is a snapshot of what I'm spending my time on at the moment.</p>
+
+    <section aria-labelledby="building-heading">
+      <h2 id="building-heading">Building Leamout</h2>
+      <p>
+        I'm building{" "}<a href="https://leamout.com">Leamout</a>, a
+        carrier-grade runtime and control plane for autonomous voice agents.
+        Right now I'm focused on the infrastructure behind reliable, real-time
+        conversations, from call control and interruptions to state recovery and
+        execution.
+      </p>
+    </section>
+
+    <section aria-labelledby="studying-heading">
+      <h2 id="studying-heading">Studying Computer Science</h2>
+      <p>
+        I'm currently studying Computer Science at Ho Technical University in
+        Ghana, alongside my work on Leamout.
+      </p>
+    </section>
+
+    <section aria-labelledby="exploring-heading">
+      <h2 id="exploring-heading">Exploring</h2>
+      <p>
+        I'm spending time understanding distributed systems, telecommunications,
+        real-time communication, and artificial intelligence, particularly where
+        these areas meet.
+      </p>
+    </section>
+
+    <p class="updated">
+      Last updated:{" "}<time datetime="2026-10-23">October 2026</time>
+    </p>
+    <p class="related">
+      I also keep a list of{" "}<a href="/uses">the tools I use</a>.
+    </p>
+  </div>
+</IndexLayout>
+
+<style>
+  .page {
+    padding-top: 2rem;
+  }
+
+  h1,
+  h2 {
+    font-size: var(--font-size-m);
+    font-weight: var(--font-weight-bold);
+  }
+
+  h1 {
+    margin: 0 0 1.25rem;
+  }
+
+  h2 {
+    margin: 0 0 0.85rem;
+  }
+
+  section {
+    margin-top: 2.75rem;
+  }
+
+  p {
+    margin: 0 0 1.25rem;
+    line-height: 1.8;
+  }
+
+  a {
+    color: var(--text-primary);
+    text-decoration: underline;
+    text-decoration-color: var(--text-tertiary);
+    text-underline-offset: 0.2em;
+  }
+
+  a:hover {
+    text-decoration-color: var(--text-primary);
+  }
+
+  .related,
+  .updated {
+    color: var(--text-secondary);
+    font-size: var(--font-size-s);
+  }
+
+  .related {
+    margin-top: 2.75rem;
+  }
+
+  .updated {
+    margin-top: 2.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .updated + .related {
+    margin-top: 0;
+  }
+
+  @media (max-width: 480px) {
+    .page {
+      padding-top: 1.5rem;
+    }
+  }
+</style>

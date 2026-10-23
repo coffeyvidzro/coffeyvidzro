@@ -1,0 +1,477 @@
+---
+title: "Why AI Agents Need a Sandbox"
+description: "AI agents can execute code, and generated code has to be treated as untrusted. Building Shiyao led me to think about what a practical execution boundary should look like."
+pubDate: 2026-08-24
+draft: false
+---
+
+AI agents are becoming increasingly good at doing things.
+
+They can read files, write code, install dependencies, run tests, inspect logs, call APIs, and modify entire codebases. Give an agent a terminal and a sufficiently capable model, and it can behave less like a chatbot and more like an autonomous developer.
+
+That is useful.
+
+It is also where things get uncomfortable.
+
+The moment an AI agent can execute code, **the code it executes has to be treated as untrusted**.
+
+Not because the agent is necessarily malicious. The problem is that we can no longer assume that every instruction, dependency, generated command, or tool response it encounters is safe.
+
+And that changes the infrastructure we need.
+
+## The terminal changes everything
+
+A language model generating this is not particularly interesting:
+
+```bash
+rm -rf ./build
+```
+
+A language model generating this is a different story:
+
+```python
+import subprocess
+
+subprocess.run(["curl", "https://example.com/script.sh"])
+```
+
+The agent may have received that instruction from a user, a repository, a dependency, a webpage, another tool, a prompt injection, or its own generated reasoning.
+
+Once the agent has access to a real shell, these instructions become actions.
+
+The question is no longer:
+
+> Can the model generate dangerous code?
+
+It obviously can.
+
+The question becomes:
+
+> **What happens when it executes that code?**
+
+## The naive architecture
+
+The simplest agent execution system looks something like this:
+
+```text
+AI Agent
+   |
+   v
+Terminal
+   |
+   v
+Host machine
+```
+
+Maybe we put it inside a container:
+
+```text
+AI Agent
+   |
+   v
+Container
+   |
+   v
+Host OS
+```
+
+That's already significantly better.
+
+Containers are excellent technology. They provide process, filesystem, and resource isolation and are the right abstraction for a huge number of workloads.
+
+But containers still share the host kernel.
+
+For infrastructure where **arbitrary, AI-generated code is the workload**, I wanted a stronger boundary.
+
+## What are we actually protecting?
+
+It's easy to say "sandbox the agent."
+
+But sandboxing isn't one problem.
+
+There are several things an untrusted workload could potentially interact with.
+
+### The filesystem
+
+Can it read:
+
+```text
+/etc/passwd
+~/.ssh/
+.env
+application secrets
+```
+
+Can it overwrite files outside its workspace?
+
+Can it escape its working directory?
+
+### The network
+
+Can it access the public internet, internal services, private networks, cloud metadata, or services that were never intended to be exposed to it?
+
+### Resources
+
+Can it consume all available CPU, memory, disk space, processes, or connections?
+
+### The host
+
+And, most importantly:
+
+> **Can the workload affect the machine actually running the agent infrastructure?**
+
+That last question is the reason I started looking at microVMs.
+
+## Enter Firecracker
+
+Shiyao uses Firecracker to create lightweight microVMs for individual workloads.
+
+The architecture becomes:
+
+```text
+AI Agent
+   |
+   v
+Shiyao Control Plane
+   |
+   v
++-------------------+
+| Firecracker VM    |
+|                   |
+| Guest OS          |
+| Agent workload    |
++-------------------+
+```
+
+Instead of executing arbitrary code directly on the host, the workload gets its own virtual machine boundary.
+
+Firecracker is interesting here because it gives us VM-level isolation without necessarily requiring the operational weight traditionally associated with full virtual machines.
+
+The goal isn't to make execution impossible.
+
+The goal is to make the blast radius **small and explicit**.
+
+## The sandbox isn't just a VM
+
+This was one of the first things that became apparent while building Shiyao.
+
+Starting a VM isn't a security architecture.
+
+A sandbox has to control the things around the VM too.
+
+```text
+                 Control Plane
+                /      |       \
+               /       |        \
+              v        v         v
+           VM       Network    Resources
+            |          |          |
+         VSOCK      nftables    limits
+```
+
+The control plane owns the lifecycle.
+
+It decides when a VM can be created, how many can exist, what resources they receive, how they communicate with the host, what network destinations they can reach, how commands are executed, and how everything gets cleaned up.
+
+That last part is easy to underestimate.
+
+## Network access should be a privilege
+
+One of the decisions I wanted Shiyao to make explicit was network access.
+
+The default should not be:
+
+```text
+VM → Internet → whatever it wants
+```
+
+Instead:
+
+```text
+VM
+ |
+ v
+TAP interface
+ |
+ v
+nftables
+ |
+ +---- allowed destination
+ |
+ +---- blocked destination
+```
+
+The networking model is **default deny**.
+
+A workload shouldn't automatically get access to every service reachable from the machine running it.
+
+This matters because an AI agent doesn't need to intentionally attack an internal service for something bad to happen. A prompt injection can be enough to convince it to make a request it shouldn't.
+
+The sandbox therefore needs to assume:
+
+> **The workload may attempt things it was never supposed to attempt.**
+
+## The metadata problem
+
+Cloud environments make this particularly interesting.
+
+Many cloud providers expose instance metadata through addresses such as:
+
+```text
+169.254.169.254
+```
+
+If an untrusted workload can freely reach metadata services, the consequences can be serious depending on the environment and credentials available.
+
+So network isolation isn't simply about preventing `curl google.com`.
+
+It's about controlling **where the workload can communicate at all**.
+
+That means things like blocking private network ranges, blocking metadata endpoints, restricting outbound destinations, controlling DNS, and cleaning up network state when a VM disappears.
+
+Security becomes a systems problem.
+
+## Communication with the guest
+
+The host still needs a way to tell the guest what to execute.
+
+One tempting solution would be SSH.
+
+But Shiyao doesn't need a general-purpose remote shell protocol.
+
+It needs something much narrower.
+
+So Shiyao uses **VSOCK** for host-to-guest communication.
+
+The conceptual flow is:
+
+```text
+Host
+ |
+ | Execute command
+ v
+VSOCK
+ |
+ v
+Guest agent
+ |
+ v
+process
+ |
+ v
+stdout / stderr
+ |
+ v
+Host
+```
+
+This gives the control plane a deliberately constrained interface into the VM.
+
+And the API itself becomes another security boundary.
+
+Requests need limits. Output needs limits. Execution needs timeouts. Concurrency needs limits.
+
+A sandbox that prevents filesystem escape but allows an agent to create unlimited processes isn't particularly useful.
+
+## Resource limits matter too
+
+Imagine an agent generates an unbounded memory allocation or launches thousands of processes.
+
+The workload doesn't need to escape the VM to cause problems. It just needs to consume enough resources.
+
+So Shiyao treats resource consumption as part of the sandbox design.
+
+A workload gets an explicit resource envelope.
+
+The control plane also needs admission control:
+
+```text
+new execution request
+        |
+        v
+   capacity?
+    /     \
+  yes      no
+  |         |
+  v         v
+provision  reject /
+ VM        backpressure
+```
+
+This matters particularly for AI agents because autonomous systems can generate work much faster than a human operator can.
+
+## But then there's the lifecycle
+
+This turned out to be one of the more interesting parts.
+
+A VM isn't just:
+
+```text
+start()
+execute()
+stop()
+```
+
+There are resources everywhere:
+
+```text
+VM
+ ├── Firecracker process
+ ├── VSOCK CID
+ ├── TAP interface
+ ├── IP address
+ ├── nftables rules
+ ├── socket
+ └── guest state
+```
+
+If provisioning fails halfway through, what happens?
+
+What if Firecracker starts but the guest doesn't become ready?
+
+What if execution times out?
+
+What if the client disconnects?
+
+What if cleanup itself fails?
+
+The sandbox has to remain correct even when individual pieces fail.
+
+This is where I started thinking about Shiyao less as "a VM launcher" and more as a **resource lifecycle system**.
+
+## Isolation introduces another problem: speed
+
+There is an obvious trade-off.
+
+We want **strong isolation**, but we also want **fast execution**.
+
+An AI agent shouldn't have to wait around every time it wants to run a command.
+
+So Shiyao explores two ideas: warm instances and snapshots.
+
+### Warm instances
+
+Keep already-booted VMs available:
+
+```text
+              Warm Pool
+          ┌──────┬──────┐
+          │ VM 1 │ VM 2 │
+          └──────┴──────┘
+                |
+                v
+          new execution
+```
+
+### Snapshots
+
+Instead of booting from scratch, resume from a known state.
+
+This can significantly change the startup characteristics of an isolated execution environment.
+
+But it introduces another problem.
+
+## Reset is a security boundary
+
+Suppose Agent A gets VM #42.
+
+It writes secrets, installs packages, creates files, modifies configuration, and spawns processes.
+
+Then we give the same VM to Agent B.
+
+What exactly did we reset?
+
+That's not just a performance question.
+
+It's a security question.
+
+A reusable sandbox has to answer:
+
+> **What does clean mean?**
+
+Filesystem state? Memory? Processes? Network state? Environment variables? Credentials? Sockets?
+
+This is one of the reasons warm pools and snapshots are interesting: **performance optimizations can become security primitives.**
+
+## What Shiyao is actually trying to build
+
+The goal isn't to create an impenetrable security boundary.
+
+That would be a much stronger claim than I can responsibly make.
+
+Shiyao is an exploration of what a practical execution boundary for AI agents could look like:
+
+```text
+                         AI Agent
+                            |
+                            v
+                    +---------------+
+                    | Shiyao        |
+                    | Control Plane |
+                    +-------+-------+
+                            |
+              +-------------+-------------+
+              |             |             |
+              v             v             v
+          Admission      Network      Resources
+              |             |             |
+              +-------------+-------------+
+                            |
+                            v
+                   +----------------+
+                   | Firecracker VM |
+                   |                |
+                   | Agent workload |
+                   +-------+--------+
+                           |
+                         VSOCK
+                           |
+                           v
+                       execution
+```
+
+The interesting part isn't any individual component.
+
+It's the boundary between them.
+
+## The bigger idea
+
+AI agents are changing what we consider a workload.
+
+Traditionally, software executes code that developers wrote and understand.
+
+With agents, we increasingly have systems where:
+
+```text
+human intent
+     ↓
+AI reasoning
+     ↓
+generated code
+     ↓
+tool invocation
+     ↓
+machine execution
+```
+
+There are more steps between **"a human wanted this"** and **"the machine did this."**
+
+Every additional step introduces uncertainty.
+
+That doesn't mean we should stop agents from executing code.
+
+It means we should stop pretending that generated code deserves the same trust as the infrastructure executing it.
+
+The sandbox becomes the boundary between those two worlds.
+
+And that's ultimately why I started building Shiyao.
+
+> **If an AI agent can execute arbitrary code, the execution environment should assume that code is untrusted.**
+
+The agent doesn't need to be malicious.
+
+The code doesn't even need to be intentionally malicious.
+
+The system simply needs to be designed around the possibility that **something will go wrong**.
+
+That's what a sandbox is for.

@@ -1,0 +1,75 @@
+<style is:inline>
+  :root {
+    --bg: #ffffff;
+  }
+
+  html.dark {
+    --bg: #1c1c1c;
+  }
+
+  html {
+    background-color: var(--bg);
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    if (window.ThemeManager?.initialized) return;
+
+    const storageKey = "vidzro-theme";
+    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
+
+    function getStoredTheme() {
+      try {
+        const stored = localStorage.getItem(storageKey);
+        return stored === "light" || stored === "dark" ? stored : null;
+      } catch {
+        return null;
+      }
+    }
+
+    function applyTheme(theme) {
+      document.documentElement.classList.remove("light", "dark");
+      document.documentElement.classList.add(theme);
+    }
+
+    const manager = {
+      initialized: true,
+      getEffectiveTheme() {
+        return getStoredTheme() ?? (systemTheme.matches ? "dark" : "light");
+      },
+      toggle() {
+        const current = document.documentElement.classList.contains("dark")
+          ? "dark"
+          : "light";
+        const next = current === "dark" ? "light" : "dark";
+
+        try {
+          localStorage.setItem(storageKey, next);
+        } catch {
+          // The selected theme still applies for the current visit.
+        }
+
+        applyTheme(next);
+      },
+    };
+
+    window.ThemeManager = manager;
+    applyTheme(manager.getEffectiveTheme());
+
+    systemTheme.addEventListener("change", () => {
+      if (getStoredTheme() === null) {
+        applyTheme(manager.getEffectiveTheme());
+      }
+    });
+
+    document.addEventListener("astro:after-swap", () => {
+      applyTheme(manager.getEffectiveTheme());
+    });
+  })();
+</script>

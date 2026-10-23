@@ -1,0 +1,32 @@
+---
+import { ClientRouter } from "astro:transitions";
+import ThemeManager from "../components/ui/ThemeManager.astro";
+import TransitionWrapper from "../components/layout/TransitionWrapper.astro";
+import type { LayoutProps } from "../types";
+
+type Props = LayoutProps;
+
+const { type = "page" } = Astro.props;
+---
+
+<html lang="en-GH">
+  <head>
+    <ThemeManager />
+    <ClientRouter />
+    <slot name="head" />
+  </head>
+  <body data-centered={true} style="max-width: 35rem; --content-width: 35rem;">
+    <TransitionWrapper type={type} class="layout-wrapper">
+      <slot />
+    </TransitionWrapper>
+  </body>
+</html>
+
+<style is:global>
+  .layout-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+  }
+</style>

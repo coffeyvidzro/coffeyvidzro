@@ -1,0 +1,96 @@
+---
+import { SITE } from "../../consts";
+import JsonLd from "../seo/JsonLd.astro";
+import type { SchemaNodes } from "../../lib/seo/schema";
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  noindex?: boolean;
+  type?: "website" | "article" | "profile";
+  jsonLd?: SchemaNodes;
+  publishedTime?: Date;
+  modifiedTime?: Date;
+}
+
+const {
+  title,
+  description,
+  image,
+  noindex = false,
+  type = "website",
+  jsonLd,
+  publishedTime,
+  modifiedTime,
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const socialImage = image ? new URL(image, Astro.site) : undefined;
+---
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<meta name="generator" content={Astro.generator} />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="sitemap" href="/sitemap-index.xml" />
+{!noindex && <link rel="canonical" href={canonicalURL} />}
+{noindex && <meta name="robots" content="noindex, follow" />}
+
+<link
+  rel="preload"
+  href="/fonts/Inter.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin="anonymous"
+/>
+<link
+  rel="preload"
+  href="/fonts/Besley-Italic.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin="anonymous"
+/>
+
+<title>{title}</title>
+<meta name="description" content={description} />
+
+<meta property="og:type" content={type} />
+<meta property="og:title" content={title} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:site_name" content={SITE.name} />
+<meta property="og:description" content={description} />
+{socialImage && <meta property="og:image" content={socialImage} />}
+{
+  type === "article" && publishedTime && (
+    <meta
+      property="article:published_time"
+      content={publishedTime.toISOString()}
+    />
+  )
+}
+{
+  type === "article" && modifiedTime && (
+    <meta
+      property="article:modified_time"
+      content={modifiedTime.toISOString()}
+    />
+  )
+}
+
+<meta
+  name="twitter:card"
+  content={socialImage ? "summary_large_image" : "summary"}
+/>
+<meta name="twitter:url" content={canonicalURL} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+{socialImage && <meta name="twitter:image" content={socialImage} />}
+
+<link
+  rel="alternate"
+  type="application/rss+xml"
+  title={SITE.name}
+  href={new URL("/rss.xml", Astro.site)}
+/>
+{jsonLd && <JsonLd nodes={jsonLd} />}

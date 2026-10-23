@@ -1,0 +1,16 @@
+---
+import type { SchemaNodes } from "../../lib/seo/schema";
+import { serializeSchema } from "../../lib/seo/schema";
+
+interface Props {
+  nodes: SchemaNodes;
+}
+
+const { nodes } = Astro.props;
+---
+
+<script
+  type="application/ld+json"
+  is:inline
+  set:html={serializeSchema(nodes)}
+/>

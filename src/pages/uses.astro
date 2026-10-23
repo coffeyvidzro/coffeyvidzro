@@ -1,0 +1,105 @@
+---
+import IndexLayout from "../layouts/IndexLayout.astro";
+import { USES } from "../consts";
+---
+
+<IndexLayout title={USES.title} description={USES.description}>
+  <div class="page">
+    <h1>Uses.</h1>
+    <p>
+      These are some of the languages, tools, and technologies I work with when
+      building software. I'll update this page as my setup changes.
+    </p>
+
+    <section aria-labelledby="languages-heading">
+      <h2 id="languages-heading">Languages</h2>
+      <p>
+        I work with <strong>Go</strong> for backend services and{" "}
+        <strong>TypeScript</strong> for web applications.
+      </p>
+    </section>
+
+    <section aria-labelledby="web-heading">
+      <h2 id="web-heading">Web development</h2>
+      <p>
+        I use <strong>Astro</strong> for this website and{" "}
+        <strong>Next.js</strong> for the Leamout console.
+      </p>
+    </section>
+
+    <section aria-labelledby="infrastructure-heading">
+      <h2 id="infrastructure-heading">Infrastructure</h2>
+      <p>
+        I work with <strong>PostgreSQL</strong>, <strong>Redis</strong>, and{
+          " "
+        }
+        <strong>NATS JetStream</strong> for persistent data, fast state, and messaging.
+        I use <strong>Docker</strong> to run services during development.
+      </p>
+    </section>
+
+    <section aria-labelledby="workflow-heading">
+      <h2 id="workflow-heading">Workflow</h2>
+      <p>
+        I use <strong>Git</strong> and <strong>GitHub</strong> to manage code, review
+        changes, and collaborate across repositories.
+      </p>
+    </section>
+
+    <p class="related">
+      For what I'm currently focused on, see{" "}<a href="/now">Now</a>.
+    </p>
+  </div>
+</IndexLayout>
+
+<style>
+  .page {
+    padding-top: 2rem;
+  }
+
+  h1,
+  h2 {
+    font-size: var(--font-size-m);
+    font-weight: var(--font-weight-bold);
+  }
+
+  h1 {
+    margin: 0 0 1.25rem;
+  }
+
+  h2 {
+    margin: 0 0 0.85rem;
+  }
+
+  section {
+    margin-top: 2.75rem;
+  }
+
+  p {
+    margin: 0 0 1.25rem;
+    line-height: 1.8;
+  }
+
+  a {
+    color: var(--text-primary);
+    text-decoration: underline;
+    text-decoration-color: var(--text-tertiary);
+    text-underline-offset: 0.2em;
+  }
+
+  a:hover {
+    text-decoration-color: var(--text-primary);
+  }
+
+  .related {
+    margin-top: 2.75rem;
+    color: var(--text-secondary);
+    font-size: var(--font-size-s);
+  }
+
+  @media (max-width: 480px) {
+    .page {
+      padding-top: 1.5rem;
+    }
+  }
+</style>

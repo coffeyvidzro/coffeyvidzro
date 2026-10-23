@@ -1,0 +1,130 @@
+---
+import IndexLayout from "../layouts/IndexLayout.astro";
+import { ABOUT, SITE, SOCIALS } from "../consts";
+
+const profiles = SOCIALS.filter(
+  ({ name }) => name === "github" || name === "linkedin",
+);
+---
+
+<IndexLayout
+  title={ABOUT.title}
+  description={ABOUT.description}
+  image="/images/coffeyvidzro.jpg"
+>
+  <div class="about">
+    <p>
+      I'm Coffey Vidzro, a Ghanaian software engineer and founder of Leamout.
+    </p>
+    <p>
+      I'm interested in the infrastructure behind how systems communicate. My
+      work brings together telecommunications, distributed systems, and
+      artificial intelligence, especially the challenges that appear when
+      software has to operate in real time.
+    </p>
+
+    <section aria-labelledby="building-heading">
+      <h2 id="building-heading">What I'm building</h2>
+      <p>
+        I'm building{" "}<a href="https://leamout.com">Leamout</a>, a
+        carrier-grade runtime and control plane for autonomous voice agents.
+      </p>
+      <p>
+        My focus is on infrastructure that lets developers and organizations run
+        voice agents while retaining control over their telephony and AI
+        systems. I'm working through the hard parts of live communication,
+        including call control, interruptions, state recovery, and reliable
+        execution.
+      </p>
+    </section>
+
+    <section aria-labelledby="background-heading">
+      <h2 id="background-heading">Background &amp; Education</h2>
+      <p>
+        I'm currently studying Computer Science at Ho Technical University in
+        Ghana. Before that, I studied Computer Hardware Technology at C.Y.O
+        Technical / Vocational Institute.
+      </p>
+      <p>
+        My background in computer hardware and my ongoing studies in computer
+        science have shaped my interest in understanding how systems work, from
+        the underlying hardware to the software and infrastructure built on top
+        of it.
+      </p>
+    </section>
+
+    <section aria-labelledby="approach-heading">
+      <h2 id="approach-heading">How I approach engineering</h2>
+      <p>
+        I value clear abstractions, thoughtful trade-offs, and simple solutions
+        where they make sense. I believe the real test of infrastructure is not
+        just whether it works, but whether it remains understandable and
+        dependable when things go wrong.
+      </p>
+    </section>
+
+    <section aria-labelledby="connect-heading">
+      <h2 id="connect-heading">Find me elsewhere</h2>
+      <p>
+        I also keep notes on{" "}<a href="/now">what I'm focused on now</a> and{
+          " "
+        }
+        <a href="/uses">the tools I use</a>.
+      </p>
+      <nav aria-label="Personal links" class="links">
+        {
+          profiles.map(({ name, href }) => (
+            <a href={href} rel="me">
+              {name === "github" ? "GitHub" : "LinkedIn"}
+            </a>
+          ))
+        }
+        <a href={`mailto:${SITE.email}`}>Email</a>
+      </nav>
+    </section>
+  </div>
+</IndexLayout>
+
+<style>
+  .about {
+    padding-top: 2rem;
+  }
+
+  p {
+    margin: 0 0 1.25rem;
+    line-height: 1.8;
+  }
+
+  section {
+    margin-top: 2.75rem;
+  }
+
+  h2 {
+    margin: 0 0 0.85rem;
+    font-size: var(--font-size-m);
+    font-weight: var(--font-weight-bold);
+  }
+
+  a {
+    color: var(--text-primary);
+    text-decoration: underline;
+    text-decoration-color: var(--text-tertiary);
+    text-underline-offset: 0.2em;
+  }
+
+  a:hover {
+    text-decoration-color: var(--text-primary);
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem 1.5rem;
+  }
+
+  @media (max-width: 480px) {
+    .about {
+      padding-top: 1.5rem;
+    }
+  }
+</style>

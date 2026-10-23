@@ -1,0 +1,27 @@
+---
+import { type CollectionEntry, getCollection, render } from "astro:content";
+import PostLayout from "../layouts/PostLayout.astro";
+import { estimateReadingTime } from "../utils/reading-time";
+
+export async function getStaticPaths() {
+  const contents = await getCollection("contents");
+  return contents
+    .filter((content) => !content.data.draft)
+    .map((content) => ({
+      params: { slug: content.id },
+      props: content,
+    }));
+}
+
+type Props = CollectionEntry<"contents">;
+
+const post = Astro.props;
+const { Content, headings } = await render(post);
+
+const readingTime = estimateReadingTime(post.body ?? "");
+const toc = headings.filter(({ depth }) => depth === 2 || depth === 3);
+---
+
+<PostLayout {...post.data} readingTime={readingTime} toc={toc}>
+  <Content />
+</PostLayout>
