@@ -15,9 +15,10 @@ export function personSchema(): Person {
       caption: "Coffey Vidzro",
     },
     alternateName: "King Coffey Vidzro",
-    jobTitle: "Software Engineer",
+    jobTitle: ["Software Engineer", "Founder"],
     url: SITE.url,
-    description: "Ghanaian software engineer and founder of Leamout.",
+    description:
+      "Coffey Vidzro is a Ghanaian software engineer and founder of Leamout, working on communications infrastructure and autonomous voice agents.",
     nationality: {
       "@type": "Country",
       name: "Ghana",
