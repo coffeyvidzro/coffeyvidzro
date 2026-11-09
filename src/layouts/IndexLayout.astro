@@ -17,7 +17,8 @@ interface Props {
 }
 
 const { title, description, image, noindex = false } = Astro.props;
-const isAbout = Astro.url.pathname.replace(/\/$/, "") === "/about";
+const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
+const isAbout = pathname === "/about";
 const jsonLd = [
   personSchema(),
   websiteSchema(),
@@ -26,6 +27,7 @@ const jsonLd = [
     name: title,
     description,
     type: isAbout ? "ProfilePage" : "WebPage",
+    mainEntityId: pathname === "/" ? "https://vidzro.com/#person" : undefined,
   }),
 ];
 ---
