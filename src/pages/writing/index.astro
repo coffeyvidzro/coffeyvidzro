@@ -1,0 +1,98 @@
+---
+import { getCollection } from "astro:content";
+import IndexLayout from "../layouts/IndexLayout.astro";
+import { WRITING } from "../consts";
+
+const articles = (await getCollection("contents"))
+  .filter((article) => !article.data.draft)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<IndexLayout title={WRITING.title} description={WRITING.description}>
+  <div class="page">
+    <h1>Writing.</h1>
+    <p class="intro">
+      Notes on software engineering, building products, infrastructure, and the
+      decisions behind the things I make.
+    </p>
+
+    <ul class="articles">
+      {articles.map((article) => (
+        <li>
+          <article>
+            <p class="date">
+              <time datetime={article.data.pubDate.toISOString()}>
+                {article.data.pubDate.toLocaleDateString("en-GH", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                })}
+              </time>
+            </p>
+            <h2><a href={`/${article.id}`}>{article.data.title}</a></h2>
+            <p class="description">{article.data.description}</p>
+          </article>
+        </li>
+      ))}
+    </ul>
+  </div>
+</IndexLayout>
+
+<style>
+  .page {
+    padding-top: 2rem;
+  }
+
+  h1 {
+    margin: 0 0 1.25rem;
+    font-size: var(--font-size-m);
+    font-weight: var(--font-weight-bold);
+  }
+
+  p {
+    line-height: 1.8;
+  }
+
+  .intro {
+    margin: 0 0 2.5rem;
+  }
+
+  .articles {
+    display: grid;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .date,
+  .description {
+    color: var(--text-secondary);
+    font-size: var(--font-size-s);
+  }
+
+  .date {
+    margin: 0 0 0.35rem;
+  }
+
+  h2 {
+    margin: 0 0 0.4rem;
+    font-size: var(--font-size-m);
+    font-weight: var(--font-weight-bold);
+  }
+
+  h2 a {
+    color: var(--text-primary);
+    text-decoration: underline;
+    text-decoration-color: var(--text-tertiary);
+    text-underline-offset: 0.2em;
+  }
+
+  h2 a:hover {
+    text-decoration-color: var(--text-primary);
+  }
+
+  .description {
+    margin: 0;
+  }
+</style>
