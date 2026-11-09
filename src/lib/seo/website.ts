@@ -8,7 +8,8 @@ export function websiteSchema(): WebSite {
     "@id": WEBSITE_ID,
     name: SITE.name,
     url: SITE.url,
-    description: "The personal website of Coffey Vidzro.",
+    description:
+      "The personal website of Coffey Vidzro, a Ghanaian software engineer and founder of Leamout.",
     inLanguage: "en-GH",
     publisher: { "@id": PERSON_ID },
   };
