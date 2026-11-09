@@ -26,8 +26,9 @@ bun run build
 - `/about`: Background
 - `/now`: Current focus
 - `/uses`: Tools and technologies
+- `/writing`: Articles and notes
 
-Articles are authored in `src/content/writing`.
+Articles are authored in `src/content/writing` and exposed through the writing index, RSS feed, and sitemap.
 
 ## License
 
