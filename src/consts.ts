@@ -7,33 +7,29 @@ export const SITE: Site = {
 };
 
 export const HOME: Metadata = {
-  title: "Coffey Vidzro — Software Engineer & Founder",
+  title: "Coffey Vidzro",
   description:
     "I'm Coffey Vidzro, a Ghanaian software engineer and founder building Leamout, infrastructure for autonomous voice agents.",
 };
 
 export const ABOUT: Metadata = {
-  title: "About — Coffey Vidzro",
-  description:
-    "Learn about Coffey Vidzro, a Ghanaian software engineer, founder of Leamout, and student of computer science at Ho Technical University.",
+  title: "About",
+  description: "A little bit about me, and what I do.",
 };
 
 export const NOW: Metadata = {
-  title: "Now — Coffey Vidzro",
-  description:
-    "What Coffey Vidzro is focused on now: building Leamout, studying computer science, and exploring real-time communication infrastructure.",
+  title: "Now",
+  description: "What I'm focused on now.",
 };
 
 export const USES: Metadata = {
-  title: "Uses — Coffey Vidzro",
-  description:
-    "The programming languages, tools, and infrastructure technologies Coffey Vidzro uses to build software.",
+  title: "Uses",
+  description: "The tools and technologies I use.",
 };
 
 export const WRITING: Metadata = {
-  title: "Writing — Coffey Vidzro",
-  description:
-    "Notes and essays by Coffey Vidzro on software engineering, building products, infrastructure, and keeping software simple.",
+  title: "Writing",
+  description: "Thoughts, notes, and essays on software, design, and life.",
 };
 
 export const SOCIALS: Social[] = [
