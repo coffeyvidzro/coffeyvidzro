@@ -9,7 +9,7 @@ export const SITE: Site = {
 export const HOME: Metadata = {
   title: "Coffey Vidzro",
   description:
-    "I'm Coffey Vidzro, a Ghanaian software engineer and founder of Leamout, a carrier-grade runtime and control plane for autonomous voice agents.",
+    "I'm Coffey Vidzro, a Ghanaian software engineer and founder building Leamout, infrastructure for autonomous voice agents.",
 };
 
 export const ABOUT: Metadata = {
@@ -25,6 +25,11 @@ export const NOW: Metadata = {
 export const USES: Metadata = {
   title: "Uses",
   description: "The tools and technologies I use.",
+};
+
+export const WRITING: Metadata = {
+  title: "Writing",
+  description: "Thoughts, notes, and essays on software, design, and life.",
 };
 
 export const SOCIALS: Social[] = [
